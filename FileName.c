@@ -1,32 +1,37 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <locale.h>
 
-// Прототипы функций по заданию
-float area_rectangle(float a, float b);
-void draw_rectangle(int a, int b);
+#define M_PI 3.14159265358979323846
+
+float area_triangle(float a, float b, float c);
+void draw_triangle(int width, int height, char sym);
 void print_definition();
 
 int main() {
     setlocale(LC_ALL, "rus");
+
     int choice;
-    float width, height;
+    double alpha_g = 45;
+    double b = 4;
+    char sym = '*';
 
-    printf("=== Индивидуальное задание (Вариант 26: Прямоугольник) ===\n");
-    printf("Введите ширину фигуры: ");
-    if (scanf("%f", &width) != 1 || width <= 0) {
-        printf("Ошибка ввода ширины.\n");
-        return 1;
-    }
 
-    printf("Введите высоту фигуры: ");
-    if (scanf("%f", &height) != 1 || height <= 0) {
-        printf("Ошибка ввода высоты.\n");
-        return 1;
-    }
 
-    // Главное меню программы
+    // Перевод угла в радианы и расчет остальных сторон
+    double alpha_rad = alpha_g * M_PI / 180.0;
+    double a = b * tan(alpha_rad);         // Противолежащий катет
+    double c_exact = b / cos(alpha_rad);         // Гипотенуза
+
+
+    int height = (int)(a);
+    int width = (int)(b);
+    if (height < 1) height = 1;
+    if (width < 1) width = 1;
+
+
     while (1) {
         printf("\nВыберите операцию:\n");
         printf("1) Рассчитать площадь\n");
@@ -47,16 +52,17 @@ int main() {
 
         switch (choice) {
         case 1: {
-            float area = area_rectangle(width, height);
-            printf("\nПлощадь прямоугольника: %.2f\n", area);
+        
+            float area = area_triangle((float)a, (float)b, (float)c_exact);
+            printf("\nПлощадь прямоугольного треугольника: %.2f\n", area);
             break;
         }
         case 2:
             print_definition();
             break;
         case 3:
-            printf("\nРисунок фигуры (округлено до целых чисел):\n");
-            draw_rectangle((int)width, (int)height);
+            printf("\nРисунок фигуры (Высота ~ %d, Ширина = %d):\n", height, width);
+            draw_triangle(width, height, sym);
             break;
         default:
             printf("Неверный пункт меню. Попробуйте еще раз.\n");
@@ -66,27 +72,24 @@ int main() {
     return 0;
 }
 
-// 1) Функция расчета площади
-float area_rectangle(float a, float b) {
-    return a * b;
+float area_triangle(float a, float b, float c) {
+
+    return 0.5f * a * b;
 }
 
-// 2) Функция вывода определения фигуры
 void print_definition() {
     printf("\nОпределение фигуры:\n");
-    printf("Прямоугольник — это четырехугольник, у которого все углы прямые (равны 90 градусам).\n");
-    printf("В Варианте 26 представлена составная фигура из пересекающихся прямоугольников.\n");
+    printf("Прямоугольный треугольник — это треугольник, у которого один из углов прямой (равен 90 градусам).\n");
 }
 
-// 3) Функция рисования фигуры символом '*'
-void draw_rectangle(int a, int b) {
-    if (a <= 0 || b <= 0) {
-        printf("Невозможно нарисовать фигуру с нулевыми или отрицательными размерами.\n");
-        return;
-    }
-    for (int i = 0; i < b; i++) {
-        for (int j = 0; j < a; j++) {
-            printf("* ");
+void draw_triangle(int width, int height, char sym) {
+    for (int y = 0; y < height; y++) {
+
+        double precise_current_width = ((double)(y + 1) / height) * width;
+        int current_width = (int)(precise_current_width + 0.5);
+
+        for (int x = 0; x < current_width; x++) {
+            printf("%c", sym);
         }
         printf("\n");
     }
