@@ -42,11 +42,17 @@
 
 **РАСЧЁТ ПЛОЩАДИ (Пункт меню 1):**
 - Формула:
-  `area = width * height`
+  ` for (int y = 0; y < height; y++) {
+
+        double precise_current_width = ((double)(y + 1) / height) * width;
+        int current_width = (int)(precise_current_width + 0.5);
+
+        for (int x = 0; x < current_width; x++) {
+            printf("%c", sym);`
   
 ========================================
 
-**Площадь треугольника: 15.00**
+**Площадь треугольника: 8.00**
 
 ## 4. Информация о разработчике
   **Сёмкин Сергей Алексеевич БИЦТ 262**
